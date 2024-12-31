@@ -23,6 +23,8 @@ namespace Sistemas_de_reservas_Hoteles
         private int Numero;
         private string Tipo;
         private string Estado;
+
+        public string State { get { return Estado; } set; }
         
         public Habitacion(int Numero, string Tipo, string Estado)
         {
@@ -46,6 +48,7 @@ namespace Sistemas_de_reservas_Hoteles
         private string Habitacion;
         private string Fecha;
 
+        public string Nombrecliente { get { return NombreCliente; } set; }
 
         public Reserva(string NombreCliente, string Habitacion, string Fecha)
         {
@@ -58,10 +61,24 @@ namespace Sistemas_de_reservas_Hoteles
         //Asocia una habitacion al cliente
         public void RegistrarReserva(Habitacion hab)
         {
+           if(hab.State == "Disponible")
+            {
+                hab.State = "Ocupada";
+                Console.WriteLine($"La habitacion esta ocupada por el Cliente: {Nombrecliente}");
+            }
+           else
+            {
 
+                Console.WriteLine("La habitacion esta disponible");
+            }
+
+           //Usa el campo habitacion de la clase reserva para asociarlo al registro del metodo registrar reserva.
         }
 
         //LIbera la habitacion reservada
+        public void CancelarReserva()
+        {
 
+        }
     }
 }
