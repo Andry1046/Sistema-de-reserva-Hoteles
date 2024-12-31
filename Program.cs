@@ -60,19 +60,12 @@ namespace Sistemas_de_reservas_Hoteles
 
         //Asocia una habitacion al cliente
         public void RegistrarReserva(Habitacion hab)
-        {
-           if(hab.State == "Disponible")
-            {
-                hab.State = "Ocupada";
-                Console.WriteLine($"La habitacion esta ocupada por el Cliente: {Nombrecliente}");
-            }
-           else
-            {
-
-                Console.WriteLine("La habitacion esta disponible");
-            }
-
+        { 
            //Usa el campo habitacion de la clase reserva para asociarlo al registro del metodo registrar reserva.
+
+
+
+
         }
 
         //LIbera la habitacion reservada
@@ -81,4 +74,18 @@ namespace Sistemas_de_reservas_Hoteles
 
         }
     }
+
+
+    class Hotel
+    {
+        private List<Habitacion> Habitaciones;
+
+
+
+
+        //ListarHabitacionesPorEstado(estado) : Muestra habitaciones disponibles o ocupadas.
+        //BuscarHabitaciónPorTipo(tipo): Encuentra una habitación específica.
+        //ReservarHabitación(Reserva reserva): Realiza una reserva.
+    }
+
 }
