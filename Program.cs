@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
@@ -17,26 +19,59 @@ namespace Sistemas_de_reservas_Hoteles
         }
     }
 
+    public enum Estadohabitacion
+    {
+        Disponible,
+        Ocupada
+    }
+
     class Habitacion
     {
 
         private int Numero;
         private string Tipo;
-        private string Estado;
 
-        public string State { get { return Estado; } set; }
+
+        public int Num { get { return Numero; } set; }
+        public string Type { get { return Tipo; } set; }
+        public Estadohabitacion Estado { get; set; } = Estadohabitacion.Disponible;
+
+
         
-        public Habitacion(int Numero, string Tipo, string Estado)
+        public Habitacion(int Numero, string Tipo)
         {
             this.Numero = Numero;
             this.Tipo = Tipo;
-            this.Estado = Estado;
 
         }
 
-        public void ActualizarEstado(string nuevoestado) => Estado = nuevoestado;
+        public void InfoHab() => Console.WriteLine($"Habitacion #{Numero} Clase/Tipo: {Tipo} Estado: {Estado}");
 
-        public void MostrarInfo() => Console.WriteLine($"Habitacion #{Numero} Clase/Tipo: {Tipo} Estado: {Estado}");
+        public bool Reservar()
+        {
+            if(Estado == Estadohabitacion.Disponible)
+            {
+                Estado = Estadohabitacion.Ocupada;
+                return true;
+            }
+            else
+            { 
+                return false;
+            }
+        }
+
+        public bool Cancelar()
+        {
+            if(Estado == Estadohabitacion.Ocupada)
+            {
+                Estado = Estadohabitacion.Disponible;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
     }
 
@@ -45,40 +80,84 @@ namespace Sistemas_de_reservas_Hoteles
     {
 
         private string NombreCliente;
-        private string Habitacion;
-        private string Fecha;
+        private bool Habitacion = false;
+        private string Fecha; 
 
         public string Nombrecliente { get { return NombreCliente; } set; }
+        public bool habitacion { get { return Habitacion; } set; }
 
-        public Reserva(string NombreCliente, string Habitacion, string Fecha)
+        public Reserva(string NombreCliente, string Fecha)
         {
             this.NombreCliente = NombreCliente;
-            this.Habitacion = Habitacion;
             this.Fecha = Fecha;
             
         }
+        public void Infocliente() =>  Console.WriteLine($"Nombre: {Nombrecliente} Habitacion: {habitacion} fecha: {Fecha}");
 
-        //Asocia una habitacion al cliente
-        public void RegistrarReserva(Habitacion hab)
+        public void ReservacionHabitacion(Habitacion hab)
         {
-           if(hab.State == "Disponible")
+            if(hab.Reservar() == true)
             {
-                hab.State = "Ocupada";
-                Console.WriteLine($"La habitacion esta ocupada por el Cliente: {Nombrecliente}");
+                Console.WriteLine($"La habitacion esta Ocupada por {NombreCliente}");
+                Console.WriteLine($"La fecha de entrada es: {Fecha}");
+                habitacion = true; //Posible utilizacion en futuro
             }
-           else
+            else
             {
-
-                Console.WriteLine("La habitacion esta disponible");
+                Console.WriteLine("La habitacion ya esta ocupada");
             }
-
-           //Usa el campo habitacion de la clase reserva para asociarlo al registro del metodo registrar reserva.
         }
 
-        //LIbera la habitacion reservada
-        public void CancelarReserva()
-        {
 
+        public void CancelacionReservacion(Habitacion hab)
+        {
+            if(hab.Cancelar() == true)
+            {
+                Console.WriteLine("La habitacion ahora esta disponible");
+            }
+            else
+            {
+                Console.WriteLine("Habitacion vacia");
+            }
         }
     }
+    
+
+    class Hotel
+    {
+        private List<Habitacion> Habitaciones;
+
+        public Hotel()
+        {
+            Habitaciones = new List<Habitacion>();
+        }
+
+        public void ListarEstadoHabitaciones()
+        {
+            Console.WriteLine("----------HABITACIONES-----------");
+
+
+            foreach (Habitacion hab in Habitaciones)
+            {
+                if (hab.Estado == Estadohabitacion.Disponible)
+                {
+
+                    Console.WriteLine($"Numero: {hab.Num} Tipo: {hab.Type} estado: {hab.Estado}");
+                }
+                else
+                {
+                    Console.WriteLine($"Numero: {hab.Num} Tipo: {hab.Type} estado: {hab.Estado}");
+                }
+
+            }
+        }
+
+
+
+
+        //ListarHabitacionesPorEstado(estado) : Muestra habitaciones disponibles o ocupadas.
+        //BuscarHabitaciónPorTipo(tipo): Encuentra una habitación específica.
+        //ReservarHabitación(Reserva reserva): Realiza una reserva.
+    }
+
 }
