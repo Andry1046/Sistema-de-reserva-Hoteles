@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Schema;
+using System.Xml;
+
 
 namespace Sistemas_de_reservas_Hoteles
 {
@@ -13,8 +9,36 @@ namespace Sistemas_de_reservas_Hoteles
     {
         static void Main(string[] args)
         {
+            Habitacion hab = new Habitacion(10,"sencilla");
+            Habitacion hab2 = new Habitacion(17,"sencilla");
+
+            Habitacion habhigh = new Habitacion(20,"doble");
+            Habitacion habhigh2 = new Habitacion(30,"doble");
+
+            Habitacion hablevel = new Habitacion(50,"suite");
+            Habitacion hablevel2 = new Habitacion(70,"suite");
+
+            Hotel infinito = new();
+
+            infinito.anadir(hab);
+            infinito.anadir(hab2);
+            infinito.anadir(habhigh);
+            infinito.anadir(habhigh2);
+            infinito.anadir(hablevel);
+            infinito.anadir(hablevel2);
 
 
+            //infinito.Buscarhaitacionportipo("suite");
+            Reserva reser1 = new("Andry Martinez","20/1/2025");
+            Reserva reser2 = new("Luz","22/1/2025");
+
+            
+
+            reser1.ReservacionHabitacion(hab);
+
+            reser2.ReservacionHabitacion(habhigh);
+
+            infinito.ListarEstadoHabitaciones();
 
         }
     }
@@ -45,17 +69,21 @@ namespace Sistemas_de_reservas_Hoteles
 
         }
 
-        public void InfoHab() => Console.WriteLine($"Habitacion #{Numero} Clase/Tipo: {Tipo} Estado: {Estado}");
-
+        public void InfoHab()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Habitacion: #{Numero} \nClase/Tipo: {Tipo} \nEstado:     {Estado}");
+        }
         public bool Reservar()
         {
             if(Estado == Estadohabitacion.Disponible)
             {
                 Estado = Estadohabitacion.Ocupada;
                 return true;
+
             }
             else
-            { 
+            {
                 return false;
             }
         }
@@ -92,7 +120,7 @@ namespace Sistemas_de_reservas_Hoteles
             this.Fecha = Fecha;
             
         }
-        public void Infocliente() =>  Console.WriteLine($"Nombre: {Nombrecliente} Habitacion: {habitacion} fecha: {Fecha}");
+        public void Infocliente() =>  Console.WriteLine($"Nombre: {Nombrecliente} \nHabitacion: {habitacion} \nfecha in: {Fecha}");
 
         public void ReservacionHabitacion(Habitacion hab)
         {
@@ -105,6 +133,7 @@ namespace Sistemas_de_reservas_Hoteles
             else
             {
                 Console.WriteLine("La habitacion ya esta ocupada");
+
             }
         }
 
@@ -132,32 +161,68 @@ namespace Sistemas_de_reservas_Hoteles
             Habitaciones = new List<Habitacion>();
         }
 
+        public void anadir(Habitacion entrada)
+        {
+            Habitaciones.Add(entrada);
+        }
+
+        //Lista habitaciones por estados
         public void ListarEstadoHabitaciones()
         {
-            Console.WriteLine("----------HABITACIONES-----------");
-
+            Console.WriteLine("-------------HABITACIONES--------------");
+            Console.WriteLine();
 
             foreach (Habitacion hab in Habitaciones)
             {
                 if (hab.Estado == Estadohabitacion.Disponible)
                 {
 
-                    Console.WriteLine($"Numero: {hab.Num} Tipo: {hab.Type} estado: {hab.Estado}");
+                    Console.WriteLine($"Numero: #{hab.Num} \nTipo: {hab.Type} \nestado: {hab.Estado}");
+                    Console.WriteLine();
                 }
                 else
                 {
-                    Console.WriteLine($"Numero: {hab.Num} Tipo: {hab.Type} estado: {hab.Estado}");
+                    Console.WriteLine($"Numero: #{hab.Num} \nTipo: {hab.Type} \nestado: {hab.Estado}");
                 }
 
             }
         }
 
-
-
-
-        //ListarHabitacionesPorEstado(estado) : Muestra habitaciones disponibles o ocupadas.
         //BuscarHabitaciónPorTipo(tipo): Encuentra una habitación específica.
-        //ReservarHabitación(Reserva reserva): Realiza una reserva.
+        public void Buscarhaitacionportipo(string tipo)
+        {
+            int j = 0;
+
+            for (int i = 0; i < Habitaciones.Count; i++)
+            {
+                Habitacion busqueda = Habitaciones[i];
+
+                if (busqueda.Type != tipo)
+                {
+                   
+                    j++;
+
+                    if(j == i)
+                    {
+                        Console.WriteLine("Tipo de habitacion no disponible");
+                        Console.WriteLine(j);
+                    }
+                    
+                }
+                else
+                {
+                    busqueda.InfoHab();
+                }
+            }
+
+        }
+        public void Reservarhabitacion(Reserva reserva)
+        {
+    
+
+        }
+       
+        
     }
 
 }
